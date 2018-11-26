@@ -3,7 +3,7 @@
 It is recommended \textbf{not} to skip this chapter, because for the remainder of this book, this book will be making an extensive use of Advanced DL Support library. More information can be found here: https://github.com/Firwood-Software/AdvanceDLSupport
 
 \section{Prior to Nov 2017}
-There were at the time that variety of CLR implementations for C\# does not conform to the same behavior expected for P/Invoke. C\# at this time of writing does not have anyway to reach the global variable through normal DllImport attribute approach and it have to be done by loading libdl and dlopen/dlsym/dlclose. The libdl is a library used to dynamically load external native library at runtime and you can retrieve the address to variables or functions by using dlsym which accepts the input for symbol.
+There were at the time that variety of CLR implementations for C\# does not conform to the same behavior expected for P/Invoke. C\# at the time of writing does not have any way to reach the global variable through the normal DllImport attribute approach, and it has to be done by loading libdl and dlopen/dlsym/dlclose. Libdl is a library used to dynamically load external native libraries at runtime and you can retrieve the address to variables or functions by using dlsym which accepts the input for symbol.
 
 In Mono, it would load the external native library with dlopen and you would be sharing the same instance for this external library when using dlopen/dlsym/dlclose. CoreCLR would load the library in other means than dlopen and that would create two instances of the same library which would reflect a different behavior.
 \newpage
@@ -12,7 +12,7 @@ ADL, Advanced DL Support, was created shortly after Nov 2017 to work around the 
 
 \lstinputlisting[style=customcs]{codes/Chap4/Chap4Snippet1.cs}
 
-But this is an extremely inefficient approach to wrap native library. Advanced DL Support utilize CIL, Common Intermediate Language, the language that C\# compiles to, to generate new type and return new instance of the said type for you to utilize native library and it can be disposed and native library no longer have to be kept around for the duration of the program runtime. You can create new type and code while the program is running and that is thank to Just-In-Time Compiler. You supplement an interface, abstract class or even a base class to ADL to generate a new type at runtime that bind all of the functions and variables and make it significantly easier to bind native library at an equivalent speed to DllImport attribute approach.
+But this is an extremely inefficient approach to wrap native libraries. Advanced DL Support utilizes CIL, Common Intermediate Language, the language that C\# compiles to, to generate new types and return new instances of said types for you to utilize native libraries which can be disposed, and therefore do no longer have to be kept around for the duration of the program runtime. You can create new types and code while the program is running and that is thank to the Just-In-Time Compiler. You supplement an interface, abstract class or even a base class to ADL to generate a new type at runtime that binds all of the functions and variables and make it significantly easier to bind native library at an equivalent speed to DllImport attribute approach.
 
 \newpage
 \section{The Advanced DL Support Approach}
