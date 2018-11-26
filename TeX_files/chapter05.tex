@@ -1,1 +1,25 @@
-\chapter{Embedding Mono}
+\chapter{Marshaling between C\# and C}
+For this chapter, you'll need to create a ChapterFive directory and initialize a Dotnet Console project and to reference ''AdvancedDLSupport'' from nuget.
+
+\section{Struct Layout}
+The Layout in Struct is by default set to Sequential and you cannot use Auto layout for marshaling between Managed and Unmanaged code. Explicit Layout allows the you to explicitly define the field offsets in struct layout. This is also what enables you to  create a union in struct.
+
+\lstinputlisting[style=customcs]{codes/Chap5/Chap5Snippet1.cs}
+
+You may have noticed that the Val1 occupied 2 byte slots in the struct rather than Val2 being placed immediately after Val1. This is due to data alignment.  More information on that can be found here: https://software.intel.com/en-us/articles/data-alignment-when-migrating-to-64-bit-intel-architecture
+
+To quote from that link:
+
+\begin{coloredbox}
+	The fundamental rule of data alignment is that the safest (and most widely supported) approach relies on what Intel terms "the natural boundaries." Those are the ones that occur when you round up the size of a data item to the next largest size of two, four, eight or 16 bytes. For example, a 10-byte float should be aligned on a 16-byte address, whereas 64-bit integers should be aligned to an eight-byte address. Because this is a 64-bit architecture, pointer sizes are all eight bytes wide, and so they too should align on eight-byte boundaries. - Intel 2018
+\end{coloredbox}
+
+The size of the struct shown above is 12 bytes rather than 8 bytes, because of the sequential layout rule was followed. However if you wish to override the behavior on data alignment, you can use Explicit Layout as shown below:
+\newpage
+\lstinputlisting[style=customcs]{codes/Chap5/Chap5Snippet2.cs}
+
+In this struct, the size would become 8 bytes, because there is no padding required for any dangling member to fits in alignment.
+\section{Pointer Marshaling}
+
+\section{Function Marshaling}
+
