@@ -1,0 +1,136 @@
+\documentclass{book}
+
+\usepackage{libertine}
+
+\usepackage{graphicx}
+\graphicspath{ {images/} }
+\usepackage{listings}
+\usepackage{color}
+\usepackage{tikz}
+\definecolor{mygreen}{rgb}{0,0.6,0}
+\definecolor{gray}{rgb}{0.4,0.4,0.4}
+\definecolor{darkblue}{rgb}{0.0,0.0,0.6}
+\definecolor{cyan}{rgb}{0.0,0.6,0.6}
+\usepackage[top=3cm, bottom=2cm, outer=3cm, inner=2.1cm, headsep=14pt]{geometry}
+\newcommand{\shrug}[1][]{%
+	\begin{tikzpicture}[baseline,x=0.8\ht\strutbox,y=0.8\ht\strutbox,line width=0.125ex,#1]
+	\def\arm{(-2.5,0.95) to (-2,0.95) (-1.9,1) to (-1.5,0) (-1.35,0) to (-0.8,0)};
+	\draw \arm;
+	\draw[xscale=-1] \arm;
+	\def\headpart{(0.6,0) arc[start angle=-40, end angle=40,x radius=0.6,y radius=0.8]};
+	\draw \headpart;
+	\draw[xscale=-1] \headpart;
+	\def\eye{(-0.075,0.15) .. controls (0.02,0) .. (0.075,-0.15)};
+	\draw[shift={(-0.3,0.8)}] \eye;
+	\draw[shift={(0,0.85)}] \eye;
+	% draw mouth
+	\draw (-0.1,0.2) to [out=15,in=-100] (0.4,0.95); 
+	\end{tikzpicture}}
+\lstdefinestyle{customcs}{
+	frame=single,
+	basicstyle=\footnotesize\ttfamily, 
+	tabsize=2, 
+	extendedchars=true, 
+	breaklines=true, 
+	stringstyle=\color{red}\ttfamily, 
+	showspaces=false, 
+	showtabs=false, 
+	commentstyle=\color{gray},
+	morecomment=[l]{//},
+	morecomment=[s]{/*}{*/},
+	showstringspaces=false, 
+	morekeywords={  abstract, event, new, struct,
+		as, explicit, null, switch,
+		base, extern, object, this,
+		bool, false, operator, throw,
+		break, finally, out, true,
+		byte, fixed, override, try,
+		case, float, params, typeof,
+		catch, for, private, uint,
+		char, foreach, protected, ulong,
+		checked, goto, public, unchecked,
+		class, if, readonly, unsafe,
+		const, implicit, ref, ushort,
+		continue, in, return, using,
+		decimal, int, sbyte, virtual,
+		default, interface, sealed, volatile,
+		delegate, internal, short, void,
+		do, is, sizeof, while,
+		double, lock, stackalloc,
+		else, long, static,
+		enum, namespace, string, var},
+	keywordstyle=\color{blue},
+	identifierstyle=\color{cyan},
+}
+
+\lstdefinestyle{customc}{
+	basicstyle=\ttfamily,
+	columns=fullflexible,
+	showstringspaces=false,
+	commentstyle=\color{gray}\upshape,
+	belowcaptionskip=1\baselineskip,
+	breaklines=true,
+	frame=single,
+	xleftmargin=\parindent,
+	language=C,
+	showstringspaces=false,
+	basicstyle=\footnotesize\ttfamily,
+	keywordstyle=\bfseries\color{blue},
+	commentstyle=\itshape\color{gray},
+	identifierstyle=\color{black},
+	stringstyle=\color{red},
+}
+
+\lstdefinelanguage{XML}
+{
+	morestring=[b]",
+	morestring=[s]{>}{<},
+	morecomment=[s]{<?}{?>},
+	stringstyle=\color{black},
+	identifierstyle=\color{darkblue},
+	keywordstyle=\color{cyan},
+	morekeywords={xmlns,version,type}% list your attributes here
+}
+
+\lstdefinestyle{custombash}
+{
+	frame=single,
+	basicstyle=\footnotesize\ttfamily,
+	columns=fullflexible,
+	showstringspaces=false
+}
+
+\lstdefinestyle{customxml}
+{
+	frame=single,
+	basicstyle=\footnotesize\ttfamily,
+	columns=fullflexible,
+	showstringspaces=false
+}
+
+\begin{document}
+
+\author{BlackCentipede}
+\title{Advanced C\# for the Low-Level\\
+	   \large Licensed Attribution-NonCommercial 3.0 
+	   \\United States (CC BY-NC 3.0 US) \\
+   	   \small https://creativecommons.org/licenses/by-nc/3.0/us/}
+\date{November 2018}
+
+\frontmatter
+
+\maketitle
+\newpage
+\include{./TeX_files/Contributors}
+\tableofcontents
+
+\mainmatter
+\include{./TeX_files/chapter01}
+\include{./TeX_files/chapter02}
+\include{./TeX_files/chapter03}
+\include{./TeX_files/chapter04}
+\include{./TeX_files/chapter05}
+\backmatter
+% bibliography, glossary and index would go here.
+
+\end{document}

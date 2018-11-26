@@ -1,0 +1,1 @@
+clang -std=c99 -shared -fPIC -olibChapTwo.so ChapTwo.c

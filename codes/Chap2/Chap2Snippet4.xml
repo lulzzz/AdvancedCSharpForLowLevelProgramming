@@ -1,0 +1,4 @@
+<Target Name="CompileCProject" AfterTargets="AfterBuild">
+	<exec Command="clang -std=c99 -shared -fPIC -olibChapTwo.so	ChapTwo.c" />
+	<Copy SourceFiles="libChapTwo.so" DestinationFolder="$(OutDir)" />
+</Target>
