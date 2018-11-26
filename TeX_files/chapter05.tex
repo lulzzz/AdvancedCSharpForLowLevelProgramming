@@ -14,7 +14,7 @@ To quote from that link:
 	The fundamental rule of data alignment is that the safest (and most widely supported) approach relies on what Intel terms "the natural boundaries." Those are the ones that occur when you round up the size of a data item to the next largest size of two, four, eight or 16 bytes. For example, a 10-byte float should be aligned on a 16-byte address, whereas 64-bit integers should be aligned to an eight-byte address. Because this is a 64-bit architecture, pointer sizes are all eight bytes wide, and so they too should align on eight-byte boundaries. - Intel 2018
 \end{coloredbox}
 
-The size of the struct shown above is 12 bytes rather than 8 bytes, because of the sequential layout rule was followed. However if you wish to override the behavior on data alignment, you can use Explicit Layout as shown below:
+The size of the struct shown above is 12 bytes rather than 8 bytes, because the sequential layout rule was being followed. However if you wish to override the behavior on data alignment, you can use Explicit Layout as shown below:
 \newpage
 \lstinputlisting[style=customcs]{codes/Chap5/Chap5Snippet2.cs}
 
