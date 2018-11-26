@@ -18,9 +18,25 @@ The size of the struct shown above is 12 bytes rather than 8 bytes, because the 
 \newpage
 \lstinputlisting[style=customcs]{codes/Chap5/Chap5Snippet2.cs}
 
-In this struct, the size would become 8 bytes, because there is no padding required for any dangling member to fits in alignment.
+In this struct, the size would become 8 bytes, because there is no padding required for any dangling member to fits in alignment, so everything fits neatly inside the 8 bytes boundary.
 
-\subsection{Array of Struct Padding}
+\subsection{Union}
+Due to the nature of explicit layout, we can overlap where the field are located in memory by using FieldOffset. If you have for an example have the following code:
+
+\lstinputlisting[style=customcs]{codes/Chap5/Chap5Snippet3.cs}
+
+The size of struct would remain at 1 byte, so no padding is added and both fields are storing into the same memory in the struct.
+
+It is however recommended that you create separate structs for each union definition that you may come across in C native library binding as demonstrated:
+
+\lstinputlisting[style=customcs]{codes/Chap5/Chap5Snippet4.cs}
+
+The resulting size of this struct would be 8 bytes, because it still follows the padding rule for sequential in MyStruct by padding the union struct to fits in the memory boundary.
+
+\subsection{Fixed Size Array}
+
+\subsection{Array of Struct}
+
 \section{Pointer Marshaling}
 
 \section{Function Marshaling}
