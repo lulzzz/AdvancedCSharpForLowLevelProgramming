@@ -33,6 +33,30 @@ It is however recommended that you create separate structs for each union defini
 
 The resulting size of this struct would be 8 bytes, because it still follows the padding rule for sequential in MyStruct by padding the union struct to fits in the memory boundary.
 
+\subsection{Packing and Size Options for Struct Layout}
+You can specify the packing option to respect byte boundary from a multiple of 1 byte to 8 bytes (.Net Core 3.0 and later will support 16 to 32 bytes boundary.)
+
+Size will only be respected if the specified size is bigger than actual size of struct (including padding).
+
+Here an example to demonstrate the differences of each struct with specified Packing and Size.
+
+\lstinputlisting[style=customcs]{codes/Chap5/Chap5Snippet5.cs}
+\newpage
+And the output for each struct is as followed:
+\newline \newline
+\includegraphics[width=\textwidth]{ChapFiveConsole}
+
+\begin{enumerate}
+	\item Struct A have Size specified and is larger than the actual size of struct with padding (which is 1 byte size for Struct A actual size.)
+	\item Struct B have Size specified to be smaller than the actual size of Struct, therefore the size parameter is ignored for this layout, the size for this struct become 2 bytes. It also isn't padded to the multiple of 4 or 8, because 2 bytes can be aligned in a single 4 bytes word, you could even have 3 byte members and the size of struct would become 3 bytes long.
+	\item Struct C size is 16 bytes even though it's actual size is 9 bytes, this is how padding affects the size of the struct. If padding is set to 1, we would see the Struct C size become 9 bytes long.
+	\item Struct D size is 8 bytes as described above, the actual size of struct is 5 bytes long and because of the specified padding, it is padded to 8 bytes boundary.
+	\item Struct E size is 6 bytes as opposed to Struct D, because packing is specified to pad struct to the multiple of 2 bytes.
+\end{enumerate}
+
+\subsection{Technical Note on Packing}
+While Natural Boundaries are something to keep in mind for 64 bit data alignment, it is done differently for 32 bit architecture, it's packed in the multiple of 4 bytes. And in CoreCLR prior to 3.0, 8 bytes packing is the most that can be used and .Net Core 3.0 and later will have packing supporting 16 and 32 bytes boundary to support Vector128<T> and Vector256<T>. 
+
 \subsection{Fixed Size Array}
 
 \subsection{Array of Struct}
