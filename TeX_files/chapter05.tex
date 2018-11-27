@@ -48,7 +48,7 @@ And the output for each struct is as followed:
 
 \begin{enumerate}
 	\item Struct A have Size specified and is larger than the actual size of struct with padding (which is 1 byte size for Struct A actual size.)
-	\item Struct B have Size specified to be smaller than the actual size of Struct, therefore the size parameter is ignored for this layout, the size for this struct become 2 bytes. It also isn't padded to the multiple of 4 or 8, because 2 bytes can be aligned in a single 4 bytes word, you could even have 3 byte members and the size of struct would become 3 bytes long.
+	\item Struct B have Size specified to be smaller than the actual size of Struct, therefore the size parameter is ignored for this layout, the size for this struct become 3 bytes. It also isn't padded to the multiple of 4 or 8, because 3 bytes can be aligned in a single 4 bytes word as described by intel's Natural Boundaries.
 	\item Struct C size is 16 bytes even though it's actual size is 9 bytes, this is how padding affects the size of the struct. If padding is set to 1, we would see the Struct C size become 9 bytes long.
 	\item Struct D size is 8 bytes as described above, the actual size of struct is 5 bytes long and because of the specified padding, it is padded to 8 bytes boundary.
 	\item Struct E size is 6 bytes as opposed to Struct D, because packing is specified to pad struct to the multiple of 2 bytes.
