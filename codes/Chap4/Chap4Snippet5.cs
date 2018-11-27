@@ -11,7 +11,7 @@ static class Program
     {
         var lib = NativeLibraryBuilder.Default.ActivateInterface<IChapFourLib>("ChapFour");
         Console.WriteLine("Current Global Variable Value is: {0}", lib.GlobalVariable);
-        chapFourLib.IncrementTheGlobalVariable();
+        lib.IncrementTheGlobalVariable();
         Console.WriteLine("Incremented Global Variable Value is: {0}", lib.GlobalVariable);
         Console.ReadLine();
     }
