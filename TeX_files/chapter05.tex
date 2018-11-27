@@ -18,7 +18,7 @@ The size of the struct shown above is 12 bytes rather than 8 bytes, because the 
 \newpage
 \lstinputlisting[style=customcs]{codes/Chap5/Chap5Snippet2.cs}
 
-In this struct, the size would become 8 bytes, because there is no padding required for any dangling member to fits in alignment, so everything fits neatly inside the 8 bytes boundary.
+In this struct, the size would become 8 bytes, because there is no padding required for any dangling member to fits in alignment, so everything fits neatly inside the 8 bytes boundary. Also, in explicit layout, the arrangement of members in struct does not affect how memory is laid out, you define the offsets yourself, so you essentially can arrange the members however you like, though it's recommended to keep member arrangement sequential for readability.
 
 \subsection{Union}
 Due to the nature of explicit layout, we can overlap where the field are located in memory by using FieldOffset. If you have for an example have the following code:
