@@ -57,6 +57,20 @@ And the output for each struct is as followed:
 \subsection{Technical Note on Packing}
 While Natural Boundaries are something to keep in mind for 64 bit data alignment, it is done differently for 32 bit architecture, it's packed in the multiple of 4 bytes. And in CoreCLR prior to 3.0, 8 bytes packing is the most that can be used and .Net Core 3.0 and later will have packing supporting 16 and 32 bytes boundary to support Vector128<T> and Vector256<T>. 
 
+\subsection{What is the Difference between sizeof and Marshal.SizeOf}
+Marshal.SizeOf tells you how much bytes are needed to allocate the structure in unmanaged environment and sizeof tells you how much memory required to allocate the structure in managed environment. The SIzeOf keyword cannot accept managed object, but Unsafe.SizeOf can and it utilize the underlying CIL sizeof opcode.
+
+Let's assume we have the following code to demonstrate the difference:
+
+\lstinputlisting[style=customcs]{codes/Chap5/Chap5Snippet6.cs}
+
+And the output of that program will be:
+\newline
+\newline
+\includegraphics[width=\textwidth]{ChapFiveConsoleTwo}
+\newpage
+
+In a managed environment, the string would be a reference type and on 64 bit architecture, the pointer would be 8 bytes long, 4 bytes long on a 32 bit architecture. However, because we explicitly define that our string in a struct is a By Value String, it is essentially a fixed length array of characters of specific encoding (in this case, Ansi Encoding.) The size of struct \textit{should} be 128 bytes long for marshaling purpose.
 \subsection{Fixed Size Array}
 
 \subsection{Array of Struct}
