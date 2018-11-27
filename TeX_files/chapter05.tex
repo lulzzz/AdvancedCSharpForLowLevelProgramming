@@ -1,4 +1,4 @@
-\chapter{Marshaling between C\# and C}
+\chapter{Marshaling between C\# and C Part 1}
 For this chapter, you'll need to create a ChapterFive directory and initialize a Dotnet Console project and to reference ''AdvancedDLSupport'' from nuget.
 
 \section{Struct Layout}
@@ -58,7 +58,7 @@ And the output for each struct is as followed:
 While Natural Boundaries are something to keep in mind for 64 bit data alignment, it is done differently for 32 bit architecture, it's packed in the multiple of 4 bytes. And in CoreCLR prior to 3.0, 8 bytes packing is the most that can be used and .Net Core 3.0 and later will have packing supporting 16 and 32 bytes boundary to support Vector128<T> and Vector256<T>. 
 
 \subsection{What is the Difference between sizeof and Marshal.SizeOf}
-Marshal.SizeOf tells you how much bytes are needed to allocate the structure in unmanaged environment and sizeof tells you how much memory required to allocate the structure in managed environment. The SIzeOf keyword cannot accept managed object member in the struct such as reference type like string, but Unsafe.SizeOf can and it utilize the underlying CIL sizeof opcode.
+Marshal.SizeOf tells you how much bytes are needed to allocate the structure in unmanaged environment and sizeof tells you how much memory required to allocate the structure in managed environment. The SizeOf keyword cannot accept managed object member in the struct such as reference type like string due to language limitation (but not technical limitation of CLR), but Unsafe.SizeOf can and it utilize the underlying CIL sizeof opcode.
 
 Let's assume we have the following code to demonstrate the difference:
 
@@ -95,13 +95,7 @@ Another approach is a little more elegant approach that apply similar concept as
 
 \lstinputlisting[style=customcs]{codes/Chap5/Chap5Snippet9.cs}
 
-This code was originally written by Tanner Gooding.
+This snippet was originally written by Tanner Gooding.
 \newline
 \newline
 The idea with this approach is that you leverage the StructLayout as mentioned in previous section to allocate large enough struct to accommodate the size of By Value Array and you introduce first element field so that field can be used as a reference to read/store other elements. The indexer property simply make the code easier to read, avoiding unneeded casting on external code and to ensure that it is bound checked. This approach is recommended for By Value Array of Struct Marshaling.
-
-\section{String Marshaling}
-\section{Pointer Marshaling}
-
-\section{Function Marshaling}
-
