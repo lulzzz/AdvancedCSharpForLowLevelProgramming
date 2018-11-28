@@ -36,7 +36,7 @@ The resulting size of this struct would be 8 bytes, because it still follows the
 \subsection{Packing and Size Options for Struct Layout}
 You can specify the packing option to respect byte boundary from a multiple of 1 byte to 8 bytes (.Net Core 3.0 and later will support 16 to 32 bytes boundary.)
 
-Size will only be respected if the specified size is bigger than actual size of struct (including padding).
+Size will only be respected if the specified size is bigger than actual size of struct (including padding) however a different behavior results between Mono and CoreCLR when Size is specified to be smaller than actual size of struct. Read Subsection CoreCLR vs Mono that covers this part.
 
 Here an example to demonstrate the differences of each struct with specified Packing and Size.
 
@@ -48,7 +48,7 @@ And the output for each struct is as followed:
 
 \begin{enumerate}
 	\item Struct A have Size specified and is larger than the actual size of struct with padding (which is 1 byte size for Struct A actual size.)
-	\item Struct B have Size specified to be smaller than the actual size of Struct, therefore the size parameter is ignored for this layout, the size for this struct become 3 bytes. It also isn't padded to the multiple of 4 or 8, because 3 bytes can be aligned in a single 4 bytes word as described by intel's Natural Boundaries.
+	\item Struct B have size specified to 1 byte size struct with packing alignment of 8 bytes boundary. There are 2 separate behavior that results from this, in CoreCLR, the struct would result as 3 bytes size struct while Mono results in 4 bytes size.
 	\item Struct C size is 16 bytes even though it's actual size is 9 bytes, this is how padding affects the size of the struct. If padding is set to 1, we would see the Struct C size become 9 bytes long.
 	\item Struct D size is 8 bytes as described above, the actual size of struct is 5 bytes long and because of the specified padding, it is padded to 8 bytes boundary.
 	\item Struct E size is 6 bytes as opposed to Struct D, because packing is specified to pad struct to the multiple of 2 bytes.
@@ -71,6 +71,13 @@ And the output of that program will be:
 \newpage
 
 In a managed environment, the string would be a reference type and on 64 bit architecture, the pointer would be 8 bytes long, 4 bytes long on a 32 bit architecture. However, because we explicitly define that our string in a struct is a By Value String, it is essentially a fixed length array of characters of specific encoding (in this case, Ansi Encoding.) The size of struct \textit{should} be 128 bytes long for marshaling purpose.
+
+\subsection{CoreCLR vs Mono Struct Alignment}
+In CoreCLR, the struct size is emphasized on the packing, not on alignment, but on Mono, it's emphasized on alignment along with packing. So a struct like defined as thus:
+
+\lstinputlisting[style=customcs]{codes/Chap5/Chap5Snippet10.cs}
+
+Have Marshal.SizeOf result of 3 on CoreCLR while it's 4 on Mono, Mono rounded it up to Natural Alignment Boundary.
 
 \subsection{Fixed Size Array}
 You can allocate a fixed sized array within a struct, but it is restricted to the following types: bool, byte, char, short, int, long, sbyte, ushort, uint, ulong, float, or double. Though there is a proposal for this change to allow user-defined structs to be used for fixed sized array: \newline \newline

@@ -1,5 +1,11 @@
 \chapter{Marshaling between C\# and C Part 2}
 \section{String Marshaling}
+For this part, we'll need to create a dotnet core console project for Chapter 6 and make sure to reference ''AdvancedDLSupport'' on nuget. You will need to add a build task for this project to compile C code after building C\# code. Your CSProj file should have the following:
+\lstinputlisting[style=customxml, language=XML]{codes/Chap6/Chap6Snippet1.xml}
+
+And for this lesson, we will have a few functions to play with for string manipulation from C Library:
+
+\lstinputlisting[style=customc, language=C]{codes/Chap6/Chap6Snippet2.c}
 
 \section{Pointer Marshaling}
 

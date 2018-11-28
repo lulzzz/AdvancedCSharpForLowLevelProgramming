@@ -1,0 +1,11 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>netcoreapp2.1</TargetFramework>
+  </PropertyGroup>
+  <Target Name="CompileCProject" AfterTargets="AfterBuild">
+    <exec Command="clang -std=c99 -shared -fPIC -olibChapSix.so ChapSix.c" />
+    <Copy SourceFiles="libChapSix.so" DestinationFolder="$(OutDir)" />
+  </Target>
+</Project>
+
