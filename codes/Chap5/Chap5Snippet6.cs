@@ -13,6 +13,6 @@ public class Program
 {
     static unsafe void Main()
     {
-        Console.WriteLine("Marshal.SizeOf = {0} vs Unsafe.SizeOf = {1}",Marshal.SizeOf<A>(),  Unsafe.SizeOf<A>());
+        Console.WriteLine("Marshal.SizeOf = {0} vs Unsafe.SizeOf = {1}",Marshal.SizeOf<A>(),  Marshal.SizeOf<A>());
     }
 }
