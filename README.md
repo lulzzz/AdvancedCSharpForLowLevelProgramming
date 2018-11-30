@@ -1,4 +1,4 @@
-# AdvancedCSharpForTheLowLevel :book:
+# Advanced C# for Low-Level Programming :book:
 
 This book aims to get you to learn lower level programming in C#
 
