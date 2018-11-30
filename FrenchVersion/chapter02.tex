@@ -1,0 +1,93 @@
+\chapter{Introduction au P/Invoke}
+
+\section{Commençons}
+Tout d'abord, créer un dossier 'ChapterTwo' pour le projet et créer un nouveau fichier, 'ChapTwo.c' dans le dossier 'ChapterTwo'.
+
+Supposons que nous ayons une fonction d’addition de base dans une bibliothèque C que nous voulons appeler.
+
+\lstinputlisting[style=customc, language=C]{codes/Chap2/Chap2Snippet1.c}
+
+Au premier abord nous pourrions croire qu'il s'agit d'une simple opération d'addition, mais il y a \newline considerations that must be observed first before attempting to write platform invocation wrapper code for the function above:
+
+\begin{enumerate}
+	\item \label{itm:first} `int` datatype in C can be considered 2 bytes long or 4 bytes long or however long it may be depending on the architecture and compiler that the library is compiled on. In C Standard, int must be capable of containing \textbf{at least} the [\textminus32,767, +32,767] range; thus, it is at least 16 bits in size.
+	
+	\item Due to \ref{itm:first}, you can reasonably safeguard against data loss by substituting C\# Int32(int) which contains 4 bytes or you may choose follow the standard strictly by supplying C\# Int16(short) which contains 2 bytes, even though it can suffer data loss. The best approach is to avoid using "at least" integers in C and instead use fixed size integers provided by the compiler in ''stdint.h'' header if you have Foreign Function Interface kept in mind.
+	
+	\item Sometimes you have to keep Endianess in mind although it is less of a concern in x86\_64 architecture since little endianess is the default.
+\end{enumerate}
+The best approach to writing the Addition function is to make it clear what sized integers you're attempting to add  if possible.
+
+\lstinputlisting[style=customc, language=C]{codes/Chap2/Chap2Snippet2.c}
+
+\section{Compiling the Library}
+This book assumes you have sufficient knowledge of C, we will still however, provide compilation instruction. The following command assumes that you have named your source code file as 'ChapTwo.c' as instructed at the beginning of this chapter.
+
+\lstinputlisting[style=custombash,language=Bash]{codes/Chap2/Chap2Snippet3.sh}
+
+Here we examine and explain the compiler arguments:
+
+\begin{enumerate}
+	\item '-std=c99' specify that we are compiling C source code under C99 Standard.
+	\item '-shared' specify that we want the program to be compiled as shared/dynamic library.
+	\item '-fPIC' specify that code must be position independent so that the resultant library can be loaded by other processes and have code be made available to be run anywhere in program address space regardless of code's address.
+	\item '-olibChapTwo.so' specify what the output library should be named. lib prefix in 'libChapTwo.so' is a matter of naming convention to be followed on Linux although compilers like clang and gcc do search libraries based on lib prefix when using '-l' option. 
+\end{enumerate}
+\newpage
+\section{Configuring C\# Project}
+Since we're already in "ChapterTwo" directory, we can go ahead and run 'dotnet new Console'. There are a few steps we need to take to add the C code to our C\# project. First, we need to automate the compilation process of our C file and copy the compiled C library to the target directory for Debug, Release, or any other configurations.
+
+Open up 'ChapterTwo.csproj' file with your favorite editor, and add the following under '</PropertyGroup>' inside '<Project>' tag.
+
+\lstinputlisting[style=customxml, language=XML]{codes/Chap2/Chap2Snippet4.xml}
+
+The snippet above does few things after building our C\# project:
+\begin{enumerate}
+	\item Compile ChapTwo.c code as a shared library, libChapTwo.so
+	\item Copy libChapTwo.so into any target directory that C\# is being built in.
+\end{enumerate}
+
+This makes it significantly easier to modify our code without having to run any additional commands for it to take effect.
+
+Your CSProj should look like the following:
+
+\lstinputlisting[style=customxml, language=XML]{codes/Chap2/Chap2Snippet5.xml}
+\newpage
+\section{Wrapping C Code in C\#}
+Open up Program.cs, add a new using directive at the top of your source code.
+
+\lstinputlisting[style=customcs]{codes/Chap2/Chap2Snippet6.cs}
+
+This line imports all of the platform invocation services which enables us to interact with our C library with ease.
+
+Add the following lines under Program class:
+
+\lstinputlisting[style=customcs]{codes/Chap2/Chap2Snippet7.cs}
+
+The DllImport attribute declares that a static externally defined function is defined in a C library and to have CLR create a Platform Invocation stub to define the said function within external library.
+
+It is required to declare the function with static and extern modifiers since it is a function that is both independent of state and externally defined.
+
+Finally, modify the ''Console.WriteLine'' line to the following:
+
+\lstinputlisting[style=customcs]{codes/Chap2/Chap2Snippet8.cs}
+And your source code should look as follows:
+
+\lstinputlisting[style=customcs, language={[Sharp]C}]{codes/Chap2/Chap2Snippet9.cs}
+\newpage
+Finally, your program is ready to be executed. You can run:
+\lstinputlisting[style=custombash,language=Bash]{codes/Chap2/Chap2Snippet10.sh}
+
+And we have the following:
+
+\includegraphics[width=\textwidth]{ChapTwoConsole}
+It works as expected!
+\newpage
+\section{Some Backgrounds}
+There are few things happening when a function with DllImport is called, if this is the first time the function is being called, the Runtime will first load the external library immediately, then load the symbol ''Sum'' when P/Invoke defined method is called, and finally generate a P/Invoke stub for that function to support the call to the external function.
+
+The symbol is merely just that, a symbol that is exported by C Library that can be resolved to an address to where code or variable is located. You can find a list of symbols by running ''objdump -T libChapTwo.so'' on your library and you'll have the following:
+\newline \newline
+\includegraphics[width=\textwidth]{ChapTwoConsoleTwo}
+\newline\newline
+You will notice that the Sum symbol is shown in the symbol table in your library, this is how the CLR looks up a function by entry name.
