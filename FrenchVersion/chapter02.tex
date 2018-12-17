@@ -7,87 +7,88 @@ Supposons que nous ayons une fonction d’addition de base dans une bibliothèqu
 
 \lstinputlisting[style=customc, language=C]{codes/Chap2/Chap2Snippet1.c}
 
-Au premier abord nous pourrions croire qu'il s'agit d'une simple opération d'addition, mais il y a \newline considerations that must be observed first before attempting to write platform invocation wrapper code for the function above:
+Au premier abord nous pourrions croire qu'il s'agit d'une simple opération d'addition, mais il y a quelques considérations qui doivent être observées d'abord avant d'essayer d'écrire le code d'enveloppe d'invocation de plate-forme pour la fonction ci-dessus :
 
 \begin{enumerate}
-	\item \label{itm:first} `int` datatype in C can be considered 2 bytes long or 4 bytes long or however long it may be depending on the architecture and compiler that the library is compiled on. In C Standard, int must be capable of containing \textbf{at least} the [\textminus32,767, +32,767] range; thus, it is at least 16 bits in size.
+	\item \label{itm:first} le type `int` en C peut être considéré comme long de 2 ou 4 octets ou aussi long qu'il puisse être selon l'architecture et le compilateur sur lequel la bibliothèque est compilée. Dans la norme C, int doit être capable de contenir \textbf{au moins} l'intervalle [\textminus32,767, +32,767]; ainsi, sa taille est d'au moins 16 bits.
 	
-	\item Due to \ref{itm:first}, you can reasonably safeguard against data loss by substituting C\# Int32(int) which contains 4 bytes or you may choose follow the standard strictly by supplying C\# Int16(short) which contains 2 bytes, even though it can suffer data loss. The best approach is to avoid using "at least" integers in C and instead use fixed size integers provided by the compiler in ''stdint.h'' header if you have Foreign Function Interface kept in mind.
+	\item En raison de \ref{itm:first}, vous pouvez raisonnablement vous prémunir contre la perte de données en remplaçant C\# Int32(int) qui contient 4 octets, ou vous pouvez choisir de suivre la norme strictement en fournissant C\# Int16(short) qui contient 2 octets, même s'il peut subir des pertes de données. La meilleure approche est d'éviter d'utiliser "au moins" des entiers en C et d'utiliser des entiers de taille fixe fournis par le compilateur dans le fichier ''stdint.h'' si vous avez gardé à l'esprit l'interface de la fonction externe..
 	
-	\item Sometimes you have to keep Endianess in mind although it is less of a concern in x86\_64 architecture since little endianess is the default.
+	\item Parfois, il faut garder à l'esprit l'endianité, bien qu'elle soit moins préoccupante dans les architecture x86\_64 la petite endianesse est la valeur par défaut.
 \end{enumerate}
-The best approach to writing the Addition function is to make it clear what sized integers you're attempting to add  if possible.
+La meilleure approche pour écrire la fonction Addition est d'indiquer clairement la taille des entiers que vous essayez d'ajouter si possible.
 
 \lstinputlisting[style=customc, language=C]{codes/Chap2/Chap2Snippet2.c}
 
-\section{Compiling the Library}
-This book assumes you have sufficient knowledge of C, we will still however, provide compilation instruction. The following command assumes that you have named your source code file as 'ChapTwo.c' as instructed at the beginning of this chapter.
-
+\section{Compiler la Library}
+Ce livre suppose que vous avez une connaissance suffisante de C, nous vous fournirons tout de même des instructions de compilation. La commande suivante suppose que vous avez nommé votre fichier de code source : ' ChapTwo.c' comme indiqué au début de ce chapitre.
 \lstinputlisting[style=custombash,language=Bash]{codes/Chap2/Chap2Snippet3.sh}
 
-Here we examine and explain the compiler arguments:
+Ici nous examinons et expliquons les arguments du compilateur :
 
 \begin{enumerate}
-	\item '-std=c99' specify that we are compiling C source code under C99 Standard.
-	\item '-shared' specify that we want the program to be compiled as shared/dynamic library.
-	\item '-fPIC' specify that code must be position independent so that the resultant library can be loaded by other processes and have code be made available to be run anywhere in program address space regardless of code's address.
-	\item '-olibChapTwo.so' specify what the output library should be named. lib prefix in 'libChapTwo.so' is a matter of naming convention to be followed on Linux although compilers like clang and gcc do search libraries based on lib prefix when using '-l' option. 
+	\item '-std=c99' spécifie que nous compilons le code source C sous le standard C99.
+	\item '-shared' spécifie que nous voulons que le programme soit compilé en tant que bibliothèque partagée/dynamique.
+	\item '-fPIC' spécifie que le code doit être indépendant de la position afin que la bibliothèque résultante puisse être chargée par d'autres processus et que le code soit disponible pour être exécuté n'importe où dans l'espace d'adresse du programme indépendamment de l'adresse du code.
+	\item '-olibChapTwo.so' spécifie le nom de la bibliothèque de sortie. Le préfixe lib dans'libChapTwo.so' est une question de convention de nommage à suivre sous Linux bien que les compilateurs comme clang et gcc recherchent les bibliothèques basées sur le préfixe lib en utilisant l'option'-l'. 
 \end{enumerate}
 \newpage
 \section{Configuring C\# Project}
-Since we're already in "ChapterTwo" directory, we can go ahead and run 'dotnet new Console'. There are a few steps we need to take to add the C code to our C\# project. First, we need to automate the compilation process of our C file and copy the compiled C library to the target directory for Debug, Release, or any other configurations.
+Puisque nous sommes déjà dans le répertoire "ChapterTwo", nous pouvons lancer 'dotnet new Console'. Il y a quelques étapes que nous devons prendre pour ajouter le code C à notre projet C\#. Tout d'abord, nous devons automatiser le processus de compilation de notre fichier C et copier la bibliothèque C compilée dans le répertoire cible pour la configuration Debug, Release ou toute autre configuration..
 
-Open up 'ChapterTwo.csproj' file with your favorite editor, and add the following under '</PropertyGroup>' inside '<Project>' tag.
+Ouvrez le fichier 'ChapterTwo.csproj' avec votre éditeur préféré, et ajoutez ce qui suit sous '</PropertyGroup>' dans la balise '<Project>'.
 
 \lstinputlisting[style=customxml, language=XML]{codes/Chap2/Chap2Snippet4.xml}
 
-The snippet above does few things after building our C\# project:
+L'extrait ci-dessus fait peu de choses après la construction de notre projet C\# :
+
 \begin{enumerate}
-	\item Compile ChapTwo.c code as a shared library, libChapTwo.so
-	\item Copy libChapTwo.so into any target directory that C\# is being built in.
+	\item Compiler le code ChapTwo.c comme une bibliothèque partagée, libChapTwo.so
+	\item Copiez libChapTwo.so dans n'importe quel répertoire cible dans lequel C\# est construit.
 \end{enumerate}
 
-This makes it significantly easier to modify our code without having to run any additional commands for it to take effect.
+Il est ainsi beaucoup plus facile de modifier notre code sans avoir à exécuter de commandes supplémentaires pour qu'il prenne effet.
 
-Your CSProj should look like the following:
+Votre CSProj devrait ressembler à ce qui suit :
 
 \lstinputlisting[style=customxml, language=XML]{codes/Chap2/Chap2Snippet5.xml}
 \newpage
-\section{Wrapping C Code in C\#}
-Open up Program.cs, add a new using directive at the top of your source code.
+\section{Appeler le code C en C\#}
+Ouvrez Program.cs, ajoutez une nouvelle directive d'utilisation en haut de votre code source.
 
 \lstinputlisting[style=customcs]{codes/Chap2/Chap2Snippet6.cs}
 
-This line imports all of the platform invocation services which enables us to interact with our C library with ease.
+Cette ligne importe tous les services d'invocation de la plate-forme, ce qui nous permet d'interagir facilement avec notre bibliothèque C.
 
-Add the following lines under Program class:
+Ajoutez les lignes suivantes sous dans votre classe Program :
 
 \lstinputlisting[style=customcs]{codes/Chap2/Chap2Snippet7.cs}
 
-The DllImport attribute declares that a static externally defined function is defined in a C library and to have CLR create a Platform Invocation stub to define the said function within external library.
+L'attribut DllImport déclare qu'une fonction statique définie en externe est définie dans une bibliothèque C et que CLR doit créer un stub d'Invocation de Plate-forme pour définir ladite fonction dans une bibliothèque externe.
 
-It is required to declare the function with static and extern modifiers since it is a function that is both independent of state and externally defined.
+Il est nécessaire de déclarer la fonction avec des modificateurs statiques et externes puisque c'est une fonction qui est à la fois indépendante de l'état et définie de l'extérieur.
 
-Finally, modify the ''Console.WriteLine'' line to the following:
+Enfin, modifiez la ligne ''Console.WriteLine''' comme suit :
 
 \lstinputlisting[style=customcs]{codes/Chap2/Chap2Snippet8.cs}
-And your source code should look as follows:
+Et votre code source devrait ressembler à ce qui suit :
 
 \lstinputlisting[style=customcs, language={[Sharp]C}]{codes/Chap2/Chap2Snippet9.cs}
 \newpage
-Finally, your program is ready to be executed. You can run:
+Enfin, votre programme est prêt à être exécuté. Tu peux le lancer :
 \lstinputlisting[style=custombash,language=Bash]{codes/Chap2/Chap2Snippet10.sh}
 
-And we have the following:
+Et nous obtenons ce qui suit :
 
 \includegraphics[width=\textwidth]{ChapTwoConsole}
-It works as expected!
+Cela fonctionne comme prévu !
 \newpage
 \section{Some Backgrounds}
-There are few things happening when a function with DllImport is called, if this is the first time the function is being called, the Runtime will first load the external library immediately, then load the symbol ''Sum'' when P/Invoke defined method is called, and finally generate a P/Invoke stub for that function to support the call to the external function.
+Il se passe peu de choses lorsqu'une fonction avec DllImport est appelée, si c'est la première fois que la fonction est appelée, le Runtime chargera d'abord la bibliothèque externe immédiatement, puis chargera la méthode ''Sum'' lorsque la méthode définie par P/Invoke est appelée, et enfin générera un P/Invoke pour cette fonction pour supporter l'appel à la fonction externe.
 
-The symbol is merely just that, a symbol that is exported by C Library that can be resolved to an address to where code or variable is located. You can find a list of symbols by running ''objdump -T libChapTwo.so'' on your library and you'll have the following:
+Le symbole n'est que cela, un symbole exporté par la bibliothèque C qui peut être résolu à une adresse où se trouve le code ou la variable. Vous pouvez trouver une liste de symboles en exécutant ''objdump -T libChapTwo.so'' sur votre bibliothèque et vous aurez ce qui suit :
+
 \newline \newline
 \includegraphics[width=\textwidth]{ChapTwoConsoleTwo}
 \newline\newline
-You will notice that the Sum symbol is shown in the symbol table in your library, this is how the CLR looks up a function by entry name.
+Vous remarquerez que le symbole Sum est affiché dans le tableau des symboles de votre bibliothèque, c'est ainsi que la CLR recherche une fonction par nom d'entrée.
