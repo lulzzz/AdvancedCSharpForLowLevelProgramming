@@ -1,0 +1,36 @@
+\chapter{Introduction}
+\section{Prérequis}
+Vous avez besoin de Dotnet Core et du compilateur Clang/LLVM pour suivre ce livre. Les exemples de ce livre sont prévues pour être utilisé dans un environnement Linux, bien que les connaissances acquises ici puissent être appliquées à toute autre plateforme, y compris Windows.
+
+Vous pouvez installer Dotnet Core SDK depuis cette URL et suivre les instructions d'installation selon votre plateforme :
+\newline \newline
+ https://www.microsoft.com/net/download/linux
+\newline \newline
+Le compilateur Clang/LLVM peut être installé selon votre distribution, voici une aide au démarrage.
+\newline \newline
+\begin{tabular}{| c | c |}
+	\hline 
+	\textbf{Linux Distribution} & \textbf{Command Line or Link} \\
+	\hline
+	 Arch Linux & pacman -S llvm clang  \\
+	 \hline
+	 Ubuntu & apt.llvm.org/ \\
+	 \hline
+	 Debian & apt.llvm.org/ \\
+	 \hline
+	 Red Hat Enterprise Linux & developers.redhat.com/blog/2018/07/07/yum-install-gcc7-clang/ \\
+	 \hline
+	 Fedora & dnf install llvm clang \\
+	 \hline
+	 CentOS & Compile LLVM/Clang yourself  \shrug \\
+	 \hline
+	 OpenSUSE & zypper install llvm clang \\
+	 \hline
+	 Gentoo Linux & https://wiki.gentoo.org/wiki/Clang \\
+	 \hline
+	 Slackware Linux & Compile LLVM/Clang yourself  \shrug \\
+	 \hline
+\end{tabular}
+
+\section{Minimum Knowledge}
+Vous aurez besoin d'avoir les bases en C# et C avant de commencer ce livre, qui tentera toutefois de vous expliquer les bases du C / C++.
