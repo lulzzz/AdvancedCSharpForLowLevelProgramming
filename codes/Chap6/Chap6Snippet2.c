@@ -21,6 +21,12 @@ ByValString* Initialize()
 
 void SetDefaultMessage(ByValString* val)
 {
-    strcpy(DefaultMsg, val->StringData);
+    strcpy(val->StringData, DefaultMsg);
     val->StringData[strlen(DefaultMsg)] = 0;
+}
+
+void SetDefaultMessage2(char* val)
+{
+    strcpy(val, DefaultMsg);
+    val[strlen(DefaultMsg)] = 0;
 }

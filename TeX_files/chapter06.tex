@@ -3,10 +3,15 @@
 For this part, we'll need to create a dotnet core console project for Chapter 6 and make sure to reference ''AdvancedDLSupport'' on nuget. You will need to add a build task for this project to compile C code after building C\# code. Your CSProj file should have the following:
 \lstinputlisting[style=customxml, language=XML]{codes/Chap6/Chap6Snippet1.xml}
 
+Over the course of this lesson, we'll go over the differences between By Value String and C Ansi String (char*). It important to keep in mind that in C\#, string is a reference type and is an immutable type as well meaning, the content of the string shouldn't be modified during runtime and in that case, we would use StringBuilder which can be used for this situation (we can specify the capacity for initial size of StringBuilder.) The marshaling will marshal the reference to content of string to C native code and back almost seamlessly.
+
+\newpage
 And for this lesson, we will have a few functions to play with for string manipulation from C Library:
 
 \lstinputlisting[style=customc, language=C]{codes/Chap6/Chap6Snippet2.c}
 
+As you may have noticed, we are attempting to marshal both C Ansi String and By Value String.
+\lstinputlisting[style=customcs]{codes/Chap6/Chap6Snippet3.cs}
 \section{Pointer Marshaling}
 
 \section{Function Marshaling}
