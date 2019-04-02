@@ -97,3 +97,20 @@ Now the same representation for above in CIL can be written as this:
 And to help visualize what's happening here, the snippet below is a C\# equivalence to the CIL representation above:
 
 \lstinputlisting[style=customcs]{codes/Chap7/Chap7Snippet11.cs}
+
+\newpage
+
+There are a number of things happening in the snippet above and it can be broken down into these steps:
+
+\begin{enumerate}
+\item Define our local variable, an index
+\item Define our marks, a body and a condition
+\item Emit br to condition label since for-loop requires condition to be evaluated first
+\item Mark the label body at this point
+\item Emit invocation for Console.WriteLine with our index variable for argument
+\item Increment the index variable by 1 at the end of body stub
+\item Mark label condition at this point
+\item Emit Ldloc\_0 (our local variable is defined first) and Ldc\_I4 with an argument of 10
+\item Emit the CLT (Compare Less Than) comparison opcode to compare index to 10
+\item Emit brtrue with body label as an argument, return to body if above condition return true
+\end{enumerate}
