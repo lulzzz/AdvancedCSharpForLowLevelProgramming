@@ -114,3 +114,40 @@ There are a number of things happening in the snippet above and it can be broken
 \item Emit the CLT (Compare Less Than) comparison opcode to compare index to 10
 \item Emit brtrue with body label as an argument, return to body if above condition return true
 \end{enumerate}
+
+\section{OpCodes references}
+You will often find a huge variety of OpCodes, but you might be asking how would you find out what each OpCode do.
+
+The common method is to use documentation which is well maintained: \href{https://docs.microsoft.com/en-us/dotnet/api/system.reflection.emit.opcodes}{https:\/\/docs.microsoft.com\/en-us\/dotnet\/api\/system.reflection.emit.opcodes}
+
+ For each OpCode page, it would list the description, the stack transitional behavior and the relevant overload for emit. To understand the stack transition behavior, hypothetically, you're reading on Add opcode, it would list the following Stack Transitional Behavior:
+
+\begin{enumerate}
+\item value1 is pushed onto the stack. 
+\item value2 is pushed onto the stack. 
+\item value2 and value1 are popped from the stack; value1 is added to value2. 
+\item The result is pushed onto the stack. 
+\end{enumerate}
+
+It should be fairly clear what's happening, but if you attempt to read the same for subtraction opcode, then it would be important to know which value is a left hand value and which is the right hand value. The third item will explains that "value1 is added to value2" and that clearly define which value is left hand and vice versa.
+
+\subsection{Note about Strict Emit Utility}
+\href{https://github.com/Firwood-Software/StrictEmit}{Strict Emit} is also a free library provided by Firwood Organization  that offers a large set of extension methods for ILGenerator to further simplify and document your code.
+
+\newpage
+
+\section{Try Catch Finally Stubs}
+The try/catch/finally in CIL are particularly similar to C\# counterpart, but there are some key differences:
+
+\begin{enumerate}
+\item There is no "Try" clause in CIL emitting, it's simply Begin/End Exception Block that enclose entire Try/Catch/Finally clauses.
+\item Nested Exception Handling will have Catch/Fault blocks filter exception based on the current nested exception block.
+\end{enumerate}
+
+In the following example, the code will attempts to create a scenario that the Overflow Exception by attempting to increment an integer that have been signed to maximum value possible.
+
+\lstinputlisting[style=customcs]{codes/Chap7/Chap7Snippet13.cs}
+
+The way BeginCatchBlock works is that when the specified exception were caught, it would have exception available on the stack that you can pop or store into local variable, in this example, it get stored into the second local variable and then it get loaded to print to standard output.
+
+BeginFinallyBlock except a stub of code that will happen in either cases when exception is thrown and when code run successfully without exception.
