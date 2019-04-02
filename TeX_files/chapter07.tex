@@ -16,6 +16,8 @@ In an effort to help you actually be able to visualize and understand how this w
 
 \includegraphics[width=\textwidth]{ChapSevenVisual}
 
+There is another thing to note about CIL, the local variables have to be declared and defined before body of CIL code can be written.
+
 \section{Special Note about the Stack}
 \textit{Note: This is a simple warning for those who use Stack in .Net Framework.}
 
@@ -42,14 +44,34 @@ In CIL, there is a special rule to follow for Static Method and Class Member Met
 \lstinputlisting[style=customcs]{codes/Chap7/Chap7Snippet6.cs}
 
 \section{Introducing the Dynamic Method}
-For creating and building CIL code at runtime, there are two common approaches to this:
+For creating and building CIL code at runtime, there are three common approaches to this:
 \begin{enumerate}
 \item DynamicMethod
-\item AssemblyBuilder -> ModuleBuilder -> TypeBuilder -> MethodBuilder
+\item MethodBuilder
+\item Assembly Loading via Reflection
 \end{enumerate}
 
-\subsection{Dynamic Method}
-A dynamic method can be defined by using the constructor and specifying the name of method, the return type and parameter types. CIL requires all of the local variables and parameters to be defined from the start.
+Although there are technically infinite amount of approaches you can do it which can involve breaking the Runtime, using unsafe code, creating your own compiler that works similarly to Roslyn compiler infrastructure.
+
+\newpage
+
+\subsection{Dynamic Method Approach}
+A dynamic method can be defined by using the constructor and specifying the name of method, the return type and parameter types.
+
+\lstinputlisting[style=customcs]{codes/Chap7/Chap7Snippet7.cs}
+
+\subsection{Method Builder Approach}
+A dynamic method can also be defined by first defining a dynamic assembly, module, and a type under it. It offers an additional amount of control how you emit your code by managing where code should resides in.
+
+\lstinputlisting[style=customcs]{codes/Chap7/Chap7Snippet8.cs}
+
+\newpage
+
+\subsection{Assembly Loading via Reflection}
+In an exceptional cases, you may have a custom compiler that generates a custom assembly library, this is one form of an unorthodox dynamic code emitting at runtime. One such form can be done through Roslyn compiler infrastructure which allows you to compile C\# snippet into a .Net assembly which can then be loaded dynamically.
+
+\lstinputlisting[style=customcs]{codes/Chap7/Chap7Snippet9.cs}
+
 \section{Branches in CIL}
 
 The CIL arrangement for branching works by specifying which "line" of CIL code to jump to or if talking about marked labels in System.Reflection.Emits, then it would jump to specified marked label.
