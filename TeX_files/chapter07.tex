@@ -80,6 +80,20 @@ In an exceptional cases, you may have a custom compiler that generates a custom 
 
 The above constructs a .Net Assembly by leveraging Roslyn, we starts by defining our System library for .Net Assembly to reference on (so Runtime objects can be defined.) Then we have a simple snippet for C\# code to compile by using CSharpSyntaxTree that simply deconstruct our parsed text into SyntaxTree which we can then pass to CSharpCompilation object to emit the compiled code as a new .Net Assembly. Through reflection, we can then load the newly created .Net Assembly and select our Math type and it's method to call Add function.
 
+\newpage
+
 \section{Branches in CIL}
 
-The CIL arrangement for branching works by specifying which "line" of CIL code to jump to or if talking about marked labels in System.Reflection.Emits, then it would jump to specified marked label.
+The CIL arrangement for branching works by specifying which "line" of CIL code to jump to or if talking about marked labels in System.Reflection.Emits, then it would jump to specified marked label. We can begin a demonstration of this by dynamically emitting a simple for loop code:
+
+In a normal C\# snippet for a For-Loop, it can be written like this:
+
+\lstinputlisting[style=customcs]{codes/Chap7/Chap7Snippet12.cs}
+
+Now the same representation for above in CIL can be written as this:
+
+\lstinputlisting[style=customcs]{codes/Chap7/Chap7Snippet10.cs}
+
+And to help visualize what's happening here, the snippet below is a C\# equivalence to the CIL representation above:
+
+\lstinputlisting[style=customcs]{codes/Chap7/Chap7Snippet11.cs}
