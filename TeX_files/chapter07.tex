@@ -43,6 +43,8 @@ In CIL, there is a special rule to follow for Static Method and Class Member Met
 
 \lstinputlisting[style=customcs]{codes/Chap7/Chap7Snippet6.cs}
 
+\newpage
+
 \section{Introducing the Dynamic Method}
 For creating and building CIL code at runtime, there are three common approaches to this:
 \begin{enumerate}
@@ -51,19 +53,23 @@ For creating and building CIL code at runtime, there are three common approaches
 \item Assembly Loading via Reflection
 \end{enumerate}
 
-Although there are technically infinite amount of approaches you can do it which can involve breaking the Runtime, using unsafe code, creating your own compiler that works similarly to Roslyn compiler infrastructure.
-
-\newpage
+Although there are technically infinite amount of approaches you can do it which can involve breaking the Runtime, using unsafe code, or creating your own compiler that works similarly to Roslyn compiler infrastructure.
 
 \subsection{Dynamic Method Approach}
 A dynamic method can be defined by using the constructor and specifying the name of method, the return type and parameter types.
 
 \lstinputlisting[style=customcs]{codes/Chap7/Chap7Snippet7.cs}
 
+The DynamicMethod is a shortcut that uses pre-defined dynamic assembly and nest the delegate as a Global Method which are methods that are defined globally in assembly without needing to reside in a type.
+
+\newpage
+
 \subsection{Method Builder Approach}
-A dynamic method can also be defined by first defining a dynamic assembly, module, and a type under it. It offers an additional amount of control how you emit your code by managing where code should resides in.
+A dynamic method can also be defined by first defining a dynamic assembly, module, and a type under it. It offers an additional amount of control how you emit your code by managing where code should resides in. You can also optionally choose to define method as a global method similarly to Dynamic Method above.
 
 \lstinputlisting[style=customcs]{codes/Chap7/Chap7Snippet8.cs}
+
+There are a number of objects that have to be defined and it chain all the way to the top starting with an Assembly, the module, the type to contains our method and finally the method itself. There are few things to explain on MethodAttributes and TypeAttributes here, similarly to C\#, we have to define our methods and types with visibility modifiers and constraints. For a static class, it's usually defined by a combination of TypeAttributes.Class, TypeAttributes.Sealed, and TypeAttributes.Abstract which essentially informs the CLR that it's a type that can't be instanced since it's sealed which cannot be inherited from and that it's an abstract which means it doesn't have a constructor to begin with. It's in all essence, a static class.
 
 \newpage
 
@@ -71,6 +77,8 @@ A dynamic method can also be defined by first defining a dynamic assembly, modul
 In an exceptional cases, you may have a custom compiler that generates a custom assembly library, this is one form of an unorthodox dynamic code emitting at runtime. One such form can be done through Roslyn compiler infrastructure which allows you to compile C\# snippet into a .Net assembly which can then be loaded dynamically.
 
 \lstinputlisting[style=customcs]{codes/Chap7/Chap7Snippet9.cs}
+
+The above constructs a .Net Assembly by leveraging Roslyn, we starts by defining our System library for .Net Assembly to reference on (so Runtime objects can be defined.) Then we have a simple snippet for C\# code to compile by using CSharpSyntaxTree that simply deconstruct our parsed text into SyntaxTree which we can then pass to CSharpCompilation object to emit the compiled code as a new .Net Assembly. Through reflection, we can then load the newly created .Net Assembly and select our Math type and it's method to call Add function.
 
 \section{Branches in CIL}
 
