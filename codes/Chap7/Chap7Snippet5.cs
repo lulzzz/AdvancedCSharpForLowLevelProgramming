@@ -1,0 +1,1 @@
+new Stack<string>(originalStack);

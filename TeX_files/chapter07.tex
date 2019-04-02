@@ -15,3 +15,22 @@ Now that we have one remaining item in our stack, the "ret" opcode will pop the 
 In an effort to help you actually be able to visualize and understand how this works:
 
 \includegraphics[width=\textwidth]{ChapSevenVisual}
+
+\section{Special Note about the Stack}
+\textit{Note: This is a simple warning for those who use Stack in .Net Framework.}
+
+Stack is a Last In First Out, LIFO, so basically the last item you \textbf{push} to the stack is going to be the first item you get when you \textbf{pop} the stack. In .Net Framework, when you attempt to use the IEnumerator of Stack<T>, it will use the pop order in the way you read, so if you for an example have the following code:
+
+\lstinputlisting[style=customcs]{codes/Chap7/Chap7Snippet3.cs}
+
+There is a few things happening here, the stack would be reversed when the following code get called:
+
+\lstinputlisting[style=customcs]{codes/Chap7/Chap7Snippet5.cs}
+
+The stack already get reversed, because remember, the IEnumerator in Stack<T> is read by pop order, so when you pop and push to alternative stack, it rearrange the items like so:
+
+ABC -> CBA -> ABC
+
+To avoid this, you simply just have the following code instead of having to do any additional operations:
+
+\lstinputlisting[style=customcs]{codes/Chap7/Chap7Snippet4.cs}
