@@ -34,3 +34,13 @@ ABC -> CBA -> ABC
 To avoid this, you simply just have the following code instead of having to do any additional operations:
 
 \lstinputlisting[style=customcs]{codes/Chap7/Chap7Snippet4.cs}
+
+\newpage
+\section{Static vs Class Member Methods}
+In CIL, there is a special rule to follow for Static Method and Class Member Methods, static load the first parameter using "ldarg.0", but in class member method, it would load first parameter using "ldarg.1", not "ldarg.0". Because in class member method, "this" is a hidden parameter that get loaded when "ldarg.0" get called and this is a part of a calling convention in C\#.
+
+\lstinputlisting[style=customcs]{codes/Chap7/Chap7Snippet6.cs}
+
+\section{Branches in CIL}
+
+The CIL arrangement for branching works by specifying which "line" of CIL code to jump to or if talking about marked
