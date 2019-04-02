@@ -151,3 +151,15 @@ In the following example, the code will attempts to create a scenario that the O
 The way BeginCatchBlock works is that when the specified exception were caught, it would have exception available on the stack that you can pop or store into local variable, in this example, it get stored into the second local variable and then it get loaded to print to standard output.
 
 BeginFinallyBlock except a stub of code that will happen in either cases when exception is thrown and when code run successfully without exception.
+
+\subsection{Fault Exception Handling}
+The fault clause is specific to CIL and isn't a valid keyword for C\#, and it is similar to finally clause, except it's whenever exception get thrown, it doesn't get executed when program exit try clause normally.
+
+To demonstrate the fault handler:
+
+\lstinputlisting[style=customcs]{codes/Chap7/Chap7Snippet14.cs}
+
+\textit{Note: This code may not works on CoreCLR, but it does reflect the expected behavior on Mono Runtime}
+
+To summarize, the Fault Handler is essentially a catch all clause that only run whenever an exception get thrown.
+
