@@ -73,7 +73,7 @@ And the output of that program will be:
 In a managed environment, the string would be a reference type and on 64 bit architecture, the pointer would be 8 bytes long, 4 bytes long on a 32 bit architecture. However, because we explicitly define that our string in a struct is a By Value String, it is essentially a fixed length array of characters of specific encoding (in this case, Ansi Encoding.) The size of struct \textit{should} be 128 bytes long for marshaling purpose.
 
 \subsection{CoreCLR vs Mono Struct Alignment}
-In CoreCLR, the struct size is emphasized on the packing, not on alignment, but on Mono, it's emphasized on alignment along with packing. So a struct like defined as thus:
+In CoreCLR, the struct size is emphasized on the packing, not on alignment, but on Mono, it's emphasized on alignment along with packing. So a struct defined as thus:
 
 \lstinputlisting[style=customcs]{codes/Chap5/Chap5Snippet10.cs}
 

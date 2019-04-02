@@ -29,7 +29,35 @@ The last line demonstrate the print of null terminated string that is read from 
 
 The ValueType char array can be useful for recycling same data container without allocating/reallocating/disposing data in an iteration and thus enabling a more efficient code and less memory pressure on the process.
 
-
 \section{Pointer Marshaling}
+Pointer marshaling is a little tricky in .Net due to the barrier between Managed and Unmanaged Programming. There are few things to keep in mind:
 
+A parameter with ref modifier indicate that a \textbf{reference} to the parameter should be supplied. Hypothetically if we have the following code:
+\newline
+\lstinputlisting[style=customcs]{codes/Chap6/Chap6Snippet4.cs}
+
+It would make a reference to the IntPtr parameter itself similarly to the following snippet in C Programming Language:
+\newline
+\lstinputlisting[style=customc]{codes/Chap6/Chap6Snippet5.c}
+
+The ref modifier can be applied to class, struct, primitive types, and even a delegate parameters.
+
+C\# can marshal pointer types as function parameters and return type if unsafe modifier is applied.
+\newpage
 \section{Function Marshaling}
+
+Function pointer is a part of Pointer Marshaling, but it's represented differently in C\#.
+
+You can declare a delegate type like so:
+
+\lstinputlisting[style=customcs]{codes/Chap6/Chap6Snippet6.cs}
+
+When you declare a field, MyFunc  it acts similarly to a function pointer, but it's a managed type which contains additional information. You can't directly declare an unmanaged function pointer a delegate  as a field \textbf{in a struct} and make a pointer of that struct. There is a proposal being championed for this addition to support this behavior: https://github.com/dotnet/csharplang/issues/80
+
+The current workaround for most circumstances is to use Marshal.FunctionPointerToDelegate or to define explicitly for the field to marshal as function pointer like so:
+
+\lstinputlisting[style=customcs]{codes/Chap6/Chap6Snippet7.cs}
+
+\section{Calling Conventions}
+\section{Name Mangling}
+\section{Internal Calls}
