@@ -163,6 +163,11 @@ To demonstrate the fault handler:
 
 \textit{Note: This code may not works on CoreCLR, but it does reflect the expected behavior on Mono Runtime}
 
+\newpage
+The CIL code above can be expressed in a similar C\# Snippet, but instead of catch, it would be using fault clause:
+
+\lstinputlisting[style=customcs]{codes/Chap7/Chap7Snippet15.cs}
+
 To summarize, the Fault Handler is essentially a catch all clause that only run whenever an exception get thrown.
 
 \subsection{Filter Handling}
