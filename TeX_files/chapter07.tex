@@ -157,6 +157,8 @@ BeginFinallyBlock except a stub of code that will happen in either cases when ex
 \subsection{Fault Exception Handling}
 The fault clause is specific to CIL and isn't a valid keyword for C\#, and it is similar to finally clause, except it's whenever exception get thrown, it doesn't get executed when program exit try clause normally. This means, similarly to finally, it rethrows the exception at the end of it. It is the same in function to this C\#:
 
+\lstinputlisting[style=customcs]{codes/Chap7/Chap7Snippet16.cs}
+
 To demonstrate the fault handler:
 
 \lstinputlisting[style=customcs]{codes/Chap7/Chap7Snippet14.cs}
