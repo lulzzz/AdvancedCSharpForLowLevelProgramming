@@ -9,6 +9,7 @@ int DoAdd(int a)
     fault
     {
         Console.WriteLine("Fault block called.");
+        throw; // rethrow the exception
     }
     End:
     return variable;
